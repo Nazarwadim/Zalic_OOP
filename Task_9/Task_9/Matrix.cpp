@@ -40,9 +40,18 @@ void Matrix::transpose_matrix()
 
 Matrix& Matrix::operator=(const Matrix& mx)
 {
-    this->_col_size = mx._col_size;
-    this->_row_size = mx._row_size;
+    if (this->_col_size != mx._col_size || this->_row_size != mx._row_size) {
+        throw new std::exception("Matrices must be of the same dimension");
+    }
     this->_matrix = create_matrix(mx._col_size, mx._row_size);
+
+    for (size_t i = 0; i < this->_col_size; i++)
+    {
+        for (size_t j = 0; j < this->_row_size; j++)
+        {
+            this->_matrix[i][j] =  mx._matrix[i][j];
+        }
+    }
     return *this;
 }
 
@@ -117,7 +126,7 @@ bool Matrix::operator>(const Matrix& mx)
 
 bool Matrix::operator<(const Matrix& mx)
 {
-    return (!(*this > mx) && *this != mx);
+    return (!(*this > mx)) & *this != mx;
 }
 
 int** Matrix::create_matrix(size_t _col_size, size_t _row_size)
